@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">SGPSI</string>
+    <string name="app_header">SG PSI Reader</string>
+    <string name="region_text">Region</string>
+    <string name="reading_24">PSI24</string>
+    <string name="reading_3">PSI3</string>
+    <string name="national">National</string>
+    <string name="south">South</string>
+    <string name="north">North</string>
+    <string name="east">East</string>
+    <string name="west">West</string>
 </resources>
