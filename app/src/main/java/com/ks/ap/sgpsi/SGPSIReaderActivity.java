@@ -3,6 +3,8 @@ package com.ks.ap.sgpsi;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,25 +30,65 @@ import java.util.Map;
  * Created by kishorsutar on 2/6/17.
  */
 public class SGPSIReaderActivity extends AppCompatActivity {
-    TextView latest_time_text;
+    Date date = new Date();
+    private TextView latest_time_text;
+    private TextView twentyFourPsiEast, twentyFourPsiWest, twentyFourPsiNorth, twentyFourPsiSouth, twentyFourPsiCentral, twentyFourPsiNational;
+    private TextView threePsiEast, threePsiWest, threePsiNorth, threePsiSouth, threePsiCentral, threePsiNational;
+    private Button refresh_button;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private SimpleDateFormat sdfRequest = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sgpsireader);
-        latest_time_text = (TextView) findViewById(R.id.latest_time_text);
-
+        initUi();
         fetchPSIData();
     }
 
-    private void fetchPSIData() {
+    private void initUi() {
+        latest_time_text = (TextView) findViewById(R.id.latest_time_text);
 
+        twentyFourPsiCentral = (TextView) findViewById(R.id.twenty_four_central);
+        twentyFourPsiNational = (TextView) findViewById(R.id.twenty_four_national);
+        twentyFourPsiEast = (TextView) findViewById(R.id.twenty_four_east);
+        twentyFourPsiWest = (TextView) findViewById(R.id.twenty_four_west);
+        twentyFourPsiNorth = (TextView) findViewById(R.id.twenty_four_north);
+        twentyFourPsiSouth = (TextView) findViewById(R.id.twenty_four_south);
+
+        threePsiCentral = (TextView) findViewById(R.id.three_central);
+        threePsiNational = (TextView) findViewById(R.id.three_national);
+        threePsiEast = (TextView) findViewById(R.id.three_east);
+        threePsiWest = (TextView) findViewById(R.id.three_west);
+        threePsiNorth = (TextView) findViewById(R.id.three_north);
+        threePsiSouth = (TextView) findViewById(R.id.three_south);
+
+        refresh_button = (Button) findViewById(R.id.refresh_button);
+        addListener();
+
+    }
+
+    private void addListener() {
+
+        refresh_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fetchPSIData();
+            }
+        });
+    }
+
+    private void fetchPSIData() {
+        latest_time_text.setText("Latest Updates: " + "Fetching latest data.....");
+        date = new Date();
+        String requestUrl = ParseString.REQUEST_URL + ParseString.DATE_TIME + sdfRequest.format(date) + ParseString.DATE + sdfDate.format(date);
 // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.data.gov.sg/v1/environment/psi?date_time=2017-02-04T09:45:00&date=2017-02-04";
-
 // Request a Json response from the provided URL.
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, requestUrl, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -57,7 +99,9 @@ public class SGPSIReaderActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SGPSIReaderActivity.this, "errO:" + error.getMessage(), Toast.LENGTH_LONG).show();
+
+                        Toast.makeText(SGPSIReaderActivity.this, "errO:" + error.getCause(), Toast.LENGTH_LONG).show();
+                        latest_time_text.setText("Latest Updates: " + "Error while fetching data");
                     }
 
                 }) {
@@ -77,34 +121,60 @@ public class SGPSIReaderActivity extends AppCompatActivity {
 
     private void parseTheJsonResponse(JSONObject responseObject) {
         try {
-            JSONArray itemJsonArray = responseObject.getJSONArray("items");
+            JSONArray itemJsonArray = responseObject.getJSONArray(ParseString.ITEMS);
             JSONObject itemObject = itemJsonArray.getJSONObject(0);
-            updateTime(itemObject.getString("update_timestamp"));
-
-
+            updateTime(itemObject.getString(ParseString.UPDATE_TIME_STAMP));
+            updateTwentyFourHourlyValues(itemObject.getJSONObject(ParseString.READINGS).getJSONObject(ParseString.PSI_24_HOURLY));
+            updateThreeHourlyValues(itemObject.getJSONObject(ParseString.READINGS).getJSONObject(ParseString.PSI_3_HOURLY));
         } catch (JSONException ex) {
             ex.getMessage();
         }
     }
 
     private void updateTime(String timeString) {
+        latest_time_text.setText("Latest Updates: " + convertDateString(timeString));
+    }
 
+    private String convertDateString(String timeString) {
+        try {
+            date = sdf.parse(timeString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateFormat.format(date);
+    }
 
-        latest_time_text.setText("Latest Update: " + converDateString(timeString));
+    private void updateTwentyFourHourlyValues(JSONObject twentyFourHourlyObject) throws JSONException {
+
+        String eastPsiValue = twentyFourHourlyObject.getString(ParseString.EAST);
+        String westPsiValue = twentyFourHourlyObject.getString(ParseString.WEST);
+        String southPsiValue = twentyFourHourlyObject.getString(ParseString.SOUTH);
+        String northPsiValue = twentyFourHourlyObject.getString(ParseString.NORTH);
+        String centralPsiValue = twentyFourHourlyObject.getString(ParseString.CENTRAL);
+        String nationalPsiValue = twentyFourHourlyObject.getString(ParseString.NATIONAL);
+
+        twentyFourPsiCentral.setText(centralPsiValue);
+        twentyFourPsiNational.setText(nationalPsiValue);
+        twentyFourPsiEast.setText(eastPsiValue);
+        twentyFourPsiWest.setText(westPsiValue);
+        twentyFourPsiNorth.setText(northPsiValue);
+        twentyFourPsiSouth.setText(southPsiValue);
 
     }
 
-    private String converDateString(String timeString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        Date convertedDate = new Date();
-        try {
-            convertedDate = sdf.parse(timeString);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        String s = dateFormat.format(convertedDate);
-        return s;
+    private void updateThreeHourlyValues(JSONObject threeHourlyObject) throws JSONException {
+        String eastPsiValue = threeHourlyObject.getString(ParseString.EAST);
+        String westPsiValue = threeHourlyObject.getString(ParseString.WEST);
+        String southPsiValue = threeHourlyObject.getString(ParseString.SOUTH);
+        String northPsiValue = threeHourlyObject.getString(ParseString.NORTH);
+        String centralPsiValue = threeHourlyObject.getString(ParseString.CENTRAL);
+        String nationalPsiValue = threeHourlyObject.getString(ParseString.NATIONAL);
+
+        threePsiCentral.setText(centralPsiValue);
+        threePsiNational.setText(nationalPsiValue);
+        threePsiEast.setText(eastPsiValue);
+        threePsiWest.setText(westPsiValue);
+        threePsiNorth.setText(northPsiValue);
+        threePsiSouth.setText(southPsiValue);
     }
 }

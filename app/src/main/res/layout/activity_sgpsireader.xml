@@ -85,6 +85,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/twenty_four_national"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
@@ -92,6 +93,39 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/three_national"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:text="PSI3"
+                android:textColor="@android:color/darker_gray" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/central"
+
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/twenty_four_central"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+
+                android:text="PSI24"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/three_central"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
@@ -113,6 +147,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/twenty_four_south"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
@@ -120,6 +155,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/three_south"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
@@ -141,6 +177,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/twenty_four_north"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
@@ -148,6 +185,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/three_north"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
@@ -169,6 +207,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/twenty_four_east"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
@@ -176,6 +215,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/three_east"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
@@ -197,6 +237,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/twenty_four_west"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
@@ -204,6 +245,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/three_west"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
@@ -214,5 +256,15 @@
 
 
     </TableLayout>
+
+    <Button
+        android:id="@+id/refresh_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reading_table_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="@string/refresh"
+        android:textSize="@dimen/button_text_size" />
 
 </RelativeLayout>
