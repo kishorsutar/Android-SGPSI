@@ -14,10 +14,10 @@ API key to query for the API.
 - Done. - 30 mins.
 
 REQ03: The API key & other sensitive information should be encrypted and stored securely in the app.
-
+- Done. - 45 mins.
 
 REQ04: The mobile app should have a capability to allow user to refresh the latest PSI value from the web.
-- Done - Time - 10 mins.
+- Done - 10 mins.
 
 REQ05: The mobile app should store the query PSI result locally, so that user will have the last stored PSI value even though there is no internet connection / web service is not available
 
