@@ -30,6 +30,10 @@ import java.util.Map;
  * Created by kishorsutar on 2/6/17.
  */
 public class SGPSIReaderActivity extends AppCompatActivity {
+    static {
+        System.loadLibrary("keys");
+    }
+
     Date date = new Date();
     private TextView latest_time_text;
     private TextView twentyFourPsiEast, twentyFourPsiWest, twentyFourPsiNorth, twentyFourPsiSouth, twentyFourPsiCentral, twentyFourPsiNational;
@@ -39,6 +43,8 @@ public class SGPSIReaderActivity extends AppCompatActivity {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     private SimpleDateFormat sdfRequest = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+
+    public native String getApiKey();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +115,7 @@ public class SGPSIReaderActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML");
-                params.put("api-key", "quZMY0KZdI0oaw82bAFrfNGnk7GU1Ywp");
+                params.put("api-key", getApiKey());
                 return params;
             }
         };
