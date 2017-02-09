@@ -15,6 +15,7 @@ API key to query for the API.
 
 REQ03: The API key & other sensitive information should be encrypted and stored securely in the app.
 - Done. - 45 mins.
+- Api key is stored in JNI in c class to secure it from threats.
 
 REQ04: The mobile app should have a capability to allow user to refresh the latest PSI value from the web.
 - Done - 10 mins.
@@ -23,10 +24,10 @@ REQ05: The mobile app should store the query PSI result locally, so that user wi
 - Done - 45 mins.
 
 REQ06: The mobile app should display the PSI value according to region.
-- Done - 1hr.
+- Done - 30 mins.
 
 REQ07: The mobile app should display the following PSI value.
-- Done - 1 hr.
+- Done - 30 mins.
 
 REQ08: Below are the basic mockup of the UI, feel free to use it as a reference or improve it.
 - Basic UI completed - 1hr.
