@@ -22,6 +22,7 @@ REQ04: The mobile app should have a capability to allow user to refresh the late
 
 REQ05: The mobile app should store the query PSI result locally, so that user will have the last stored PSI value even though there is no internet connection / web service is not available
 - Done - 45 mins.
+- For time being saved JSON objects in Shared preferences in Private mode, so that outside app, it wont be accessed. Permanent solution would be implementation of SQLite Db.
 
 REQ06: The mobile app should display the PSI value according to region.
 - Done - 30 mins.
