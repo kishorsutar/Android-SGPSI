@@ -1,6 +1,8 @@
 package com.ks.ap.sgpsi;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -108,6 +110,7 @@ public class SGPSIReaderActivity extends AppCompatActivity {
 
                         Toast.makeText(SGPSIReaderActivity.this, "errO:" + error.getCause(), Toast.LENGTH_LONG).show();
                         latest_time_text.setText("Latest Updates: " + "Error while fetching data");
+                        readSharedPrefData();
                     }
 
                 }) {
@@ -132,6 +135,7 @@ public class SGPSIReaderActivity extends AppCompatActivity {
             updateTime(itemObject.getString(ParseString.UPDATE_TIME_STAMP));
             updateTwentyFourHourlyValues(itemObject.getJSONObject(ParseString.READINGS).getJSONObject(ParseString.PSI_24_HOURLY));
             updateThreeHourlyValues(itemObject.getJSONObject(ParseString.READINGS).getJSONObject(ParseString.PSI_3_HOURLY));
+
         } catch (JSONException ex) {
             ex.getMessage();
         }
@@ -166,6 +170,8 @@ public class SGPSIReaderActivity extends AppCompatActivity {
         twentyFourPsiNorth.setText(northPsiValue);
         twentyFourPsiSouth.setText(southPsiValue);
 
+        updateDataInSharedPref(twentyFourHourlyObject, false);
+
     }
 
     private void updateThreeHourlyValues(JSONObject threeHourlyObject) throws JSONException {
@@ -182,5 +188,38 @@ public class SGPSIReaderActivity extends AppCompatActivity {
         threePsiWest.setText(westPsiValue);
         threePsiNorth.setText(northPsiValue);
         threePsiSouth.setText(southPsiValue);
+
+        updateDataInSharedPref(threeHourlyObject, true);
+    }
+
+    private void updateDataInSharedPref(JSONObject jsonObject, boolean isThreeHourlyUpdate) {
+        String strFromJson = jsonObject.toString();
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (!isThreeHourlyUpdate)
+            editor.putString(getString(R.string.save_twenty_four_psi_value), strFromJson);
+        else
+            editor.putString(getString(R.string.save_three_psi_value), strFromJson);
+        editor.commit();
+
+    }
+
+    private void readSharedPrefData() {
+        String twentyFourHourlyJsonString, threeHourlyJsonString;
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        twentyFourHourlyJsonString = sharedPref.getString(getString(R.string.save_twenty_four_psi_value), null);
+        threeHourlyJsonString = sharedPref.getString(getString(R.string.save_three_psi_value), null);
+        if (null != threeHourlyJsonString && null != twentyFourHourlyJsonString) {
+            try {
+                JSONObject twentyFourJsonObj = new JSONObject(twentyFourHourlyJsonString);
+                updateTwentyFourHourlyValues(twentyFourJsonObj);
+                JSONObject threeJsonObj = new JSONObject(threeHourlyJsonString);
+                updateThreeHourlyValues(threeJsonObj);
+
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 }

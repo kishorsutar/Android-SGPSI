@@ -11,5 +11,6 @@
     <string name="east">East</string>
     <string name="west">West</string>
     <string name="refresh">Refresh</string>
-
+    <string name="save_twenty_four_psi_value">TwentyFourPsiValue</string>
+    <string name="save_three_psi_value">ThreePsiValue</string>
 </resources>
